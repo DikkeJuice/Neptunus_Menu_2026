@@ -11,9 +11,11 @@ async function loadMenuData() {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                const items = results.data.filter(item => 
-                    item.Visible === 'TRUE' && parseFloat(item.Price) > 0
-                );
+                const items = results.data.filter(item => {
+                    if (item.Visible !== 'TRUE') return false;
+                    const isSaus = item.Categories && item.Categories.toUpperCase().includes('SAUS');
+                    return parseFloat(item.Price) > 0 || isSaus;
+                });
                 renderMenu(items);
             }
         });
@@ -45,6 +47,7 @@ function renderMenu(items) {
     const tostis = [];
     const snacks = [];
     const broodjes = [];
+    const sauces = [];
 
     items.forEach(item => {
         const cat = item.Categories ? item.Categories.toUpperCase() : '';
@@ -65,6 +68,21 @@ function renderMenu(items) {
             broodjes.push(mappedItem);
         } else if (cat.includes('SNACK') || cat.includes('FRIET')) {
             snacks.push(mappedItem);
+        } else if (cat.includes('SAUS')) {
+            const modifiers = item.Modifiers || '';
+            if (modifiers.includes('Saus: (')) {
+                const sauceStr = modifiers.split('Saus: (')[1].split(')')[0];
+                const parts = sauceStr.split(',');
+                parts.forEach(p => {
+                    const [sName, sPriceStr] = p.split(': ');
+                    if (sName && sName !== 'Geen saus') {
+                        const cleanPrice = sPriceStr.replace('€', '').trim();
+                        const rawPrice = parseFloat(cleanPrice);
+                        const price = rawPrice > 0 ? processPrice(cleanPrice) : 'Gratis';
+                        sauces.push({ name: sName, desc: '', price: price, rawPrice });
+                    }
+                });
+            }
         }
     });
 
@@ -136,8 +154,16 @@ function renderMenu(items) {
     // 2. Render Tosti's
     container.appendChild(createSection("TOSTI'S", tostis));
 
-    // 3. Render Broodjes
-    container.appendChild(createSection('BROODJES', broodjes));
+    // 3. Middle Column (Broodjes + Sauzen)
+    const middleCol = document.createElement('div');
+    middleCol.style.display = 'flex';
+    middleCol.style.flexDirection = 'column';
+    middleCol.style.gap = '30px';
+    
+    middleCol.appendChild(createSection('BROODJES', broodjes));
+    middleCol.appendChild(createSection('SAUZEN & DIPS', sauces));
+    
+    container.appendChild(middleCol);
 
     // 4. Render Snacks & Friet
     // We can merge them or just put them in the remaining grid slot
