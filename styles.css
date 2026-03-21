@@ -85,7 +85,7 @@ body {
 .menu-section {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
 }
 
 .section-title {
@@ -175,7 +175,7 @@ body {
     justify-content: space-between;
     align-items: baseline;
     border-bottom: 1px dashed rgba(255,255,255,0.1);
-    padding-bottom: 12px;
+    padding-bottom: 6px;
 }
 .menu-item:last-child {
     border-bottom: none;

@@ -62,11 +62,7 @@ function renderMenu(items) {
         } else if (cat.includes('TOSTI')) {
             tostis.push(mappedItem);
         } else if (cat.includes('BROODJES')) {
-            if (name.toLowerCase().match(/(kroket|frikandel|kaassouffl|mexicano)/)) {
-                snacks.push(mappedItem);
-            } else {
-                broodjes.push(mappedItem);
-            }
+            broodjes.push(mappedItem);
         } else if (cat.includes('SNACK') || cat.includes('FRIET')) {
             snacks.push(mappedItem);
         }
@@ -99,6 +95,13 @@ function renderMenu(items) {
     }
 
     snacks.sort((a, b) => {
+        const groupA = getSnackGroup(a.name);
+        const groupB = getSnackGroup(b.name);
+        if (groupA !== groupB) return groupA - groupB;
+        return a.rawPrice - b.rawPrice;
+    });
+
+    broodjes.sort((a, b) => {
         const groupA = getSnackGroup(a.name);
         const groupB = getSnackGroup(b.name);
         if (groupA !== groupB) return groupA - groupB;
