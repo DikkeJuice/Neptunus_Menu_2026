@@ -76,10 +76,20 @@ function renderMenu(items) {
                 parts.forEach(p => {
                     const [sName, sPriceStr] = p.split(': ');
                     if (sName && sName !== 'Geen saus') {
-                        const cleanPrice = sPriceStr.replace('€', '').trim();
-                        const rawPrice = parseFloat(cleanPrice);
-                        const price = rawPrice > 0 ? processPrice(cleanPrice) : 'Gratis';
-                        sauces.push({ name: sName, desc: '', price: price, rawPrice });
+                        let finalName = sName;
+                        if (['Mayo+Curry', 'Mayo+Curry+Uitjes', 'Mayo+Ketchup', 'Mayo+Ketchup+Uitjes'].includes(finalName)) {
+                            finalName = 'Speciaal';
+                        } else if (['Mayo+Pindasaus', 'Mayo+Pindasaus+Uitjes'].includes(finalName)) {
+                            finalName = 'Oorlog';
+                        }
+                        
+                        // Check if we already added a sauce with this final name (to deduplicate Speciaal and Oorlog)
+                        if (!sauces.some(s => s.name === finalName)) {
+                            const cleanPrice = sPriceStr.replace('€', '').trim();
+                            const rawPrice = parseFloat(cleanPrice);
+                            const price = rawPrice > 0 ? processPrice(cleanPrice) : 'Gratis';
+                            sauces.push({ name: finalName, desc: '', price: price, rawPrice });
+                        }
                     }
                 });
             }
