@@ -1,0 +1,243 @@
+:root {
+    --bg-deep: #020617;
+    --neptunus-blue: #1e3a8a;
+    --neptunus-accent: #3b82f6;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --gold: #fbbf24;
+    --glass-bg: rgba(15, 23, 42, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 1080px;
+    height: 1920px;
+    background-color: var(--bg-deep);
+    background-image: 
+        radial-gradient(circle at 50% -10%, var(--neptunus-blue), var(--bg-deep) 60%),
+        radial-gradient(circle at 100% 100%, #1e1b4b, var(--bg-deep) 50%);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden; /* For fixed vertical screen size */
+    display: flex;
+    flex-direction: column;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Glass panel utility */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.menu-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.glow-text {
+    font-size: 5rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 4px;
+    color: white;
+    text-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.4);
+    text-transform: uppercase;
+}
+
+.menu-header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--neptunus-accent);
+    margin: 10px 0 0 0;
+    letter-spacing: 2px;
+}
+
+/* Main Grid Layout */
+#menu-container {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 30px;
+    flex-grow: 1;
+}
+
+/* Sections */
+.menu-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--neptunus-accent);
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--glass-border);
+    padding-bottom: 10px;
+}
+
+/* Golden Triangle: Center Top or Span */
+.wings-feature {
+    grid-column: 1 / -1; /* Span full width at top */
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(2, 6, 23, 0.8) 100%);
+    border: 1px solid var(--neptunus-accent);
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.wings-feature::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 50%);
+    animation: spotlight 10s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes spotlight {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.wings-feature .section-title {
+    color: var(--gold);
+    font-size: 3.5rem;
+    text-align: center;
+    border-bottom: none;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+.wings-flavors {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.wings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.wings-grid .menu-item {
+    flex-direction: column;
+    align-items: center;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.wings-grid .item-info {
+    padding-right: 0;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.flavor-badge {
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    margin: 5px;
+    font-size: 1.2rem;
+}
+
+/* Items */
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    padding-bottom: 12px;
+}
+.menu-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.item-info {
+    flex-grow: 1;
+    padding-right: 15px;
+}
+
+.item-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+}
+
+.item-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.item-price {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+.wings-feature .item-price {
+    color: var(--gold);
+    font-size: 2.2rem;
+}
+
+/* Footer (Sauces) */
+.menu-footer {
+    margin-top: auto;
+    padding-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid var(--glass-border);
+    margin: 0 -60px -60px -60px;
+    padding: 40px 60px;
+}
+
+.sauces-img {
+    height: 160px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+}
+
+.sauces-info h3 {
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    color: var(--neptunus-accent);
+}
+
+.sauces-info p {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
