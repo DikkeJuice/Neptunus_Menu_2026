@@ -16,23 +16,22 @@
 body {
     margin: 0;
     padding: 0;
-    width: 1080px;
-    height: 1920px;
+    width: 100%;
+    min-height: 100vh;
     background-color: var(--bg-deep);
     background-image: 
         radial-gradient(circle at 50% -10%, var(--neptunus-blue), var(--bg-deep) 60%),
         radial-gradient(circle at 100% 100%, #1e1b4b, var(--bg-deep) 50%);
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
-    overflow: hidden; /* For fixed vertical screen size */
     display: flex;
     flex-direction: column;
 }
 
 #app {
     width: 100%;
-    height: 100%;
-    padding: 60px;
+    min-height: 100vh;
+    padding: clamp(20px, 4vw, 60px);
     display: flex;
     flex-direction: column;
 }
@@ -55,7 +54,7 @@ body {
 }
 
 .glow-text {
-    font-size: 5rem;
+    font-size: clamp(3rem, 8vw, 5rem);
     font-weight: 900;
     margin: 0;
     letter-spacing: 4px;
@@ -75,8 +74,7 @@ body {
 /* Main Grid Layout */
 #menu-container {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     flex-grow: 1;
 }
@@ -142,7 +140,7 @@ body {
 
 .wings-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 40px;
 }
 
@@ -211,33 +209,4 @@ body {
     font-size: 2.2rem;
 }
 
-/* Footer (Sauces) */
-.menu-footer {
-    margin-top: auto;
-    padding-top: 40px;
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    background: rgba(0,0,0,0.3);
-    border-top: 1px solid var(--glass-border);
-    margin: 0 -60px -60px -60px;
-    padding: 40px 60px;
-}
 
-.sauces-img {
-    height: 160px;
-    object-fit: contain;
-    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-}
-
-.sauces-info h3 {
-    font-size: 2.2rem;
-    margin: 0 0 10px 0;
-    color: var(--neptunus-accent);
-}
-
-.sauces-info p {
-    font-size: 1.4rem;
-    color: var(--text-secondary);
-    margin: 0;
-}
