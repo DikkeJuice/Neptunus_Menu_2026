@@ -74,7 +74,7 @@ body {
 /* Main Grid Layout */
 #menu-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: 1.15fr 0.85fr 1fr;
     grid-template-rows: auto 1fr;
     gap: 30px;
     flex-grow: 1;
@@ -141,7 +141,7 @@ body {
 
 .wings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 40px;
 }
 
