@@ -4,7 +4,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadMenuData() {
     try {
-        const response = await fetch('./assets/neptunus2026.csv');
+        let csvPath = window.MENU_CSV || null;
+        let menuTitle = null;
+        let menuSubtitle = null;
+        let menuTagline = null;
+
+        if (!csvPath) {
+            try {
+                const scheduleResp = await fetch('./assets/menu_schedule.json');
+                const schedule = await scheduleResp.json();
+                const now = new Date();
+                const today = now.toISOString().split('T')[0];
+                const event = schedule.events.find(e => {
+                    if (e.startDate.length > 10) {
+                        const start = new Date(e.startDate);
+                        const end = e.endDate ? new Date(e.endDate) : start;
+                        return now >= start && now <= end;
+                    }
+                    return today >= e.startDate && today <= (e.endDate || e.startDate);
+                });
+
+                if (event) {
+                    csvPath = event.csv || schedule.defaultCsv;
+                    menuTitle = event.title;
+                    menuSubtitle = event.subtitle;
+                    menuTagline = event.tagline;
+                } else {
+                    csvPath = schedule.defaultCsv;
+                }
+            } catch (e) {
+                csvPath = './assets/neptunus2026.csv';
+            }
+        }
+
+        if (!csvPath) {
+            csvPath = './assets/neptunus2026.csv';
+        }
+
+        updateHeader(menuTitle, menuSubtitle, menuTagline);
+
+        const response = await fetch(csvPath);
         const csvText = await response.text();
         
         Papa.parse(csvText, {
@@ -21,6 +60,31 @@ async function loadMenuData() {
         });
     } catch (error) {
         console.error("Failed to load menu data:", error);
+    }
+}
+
+function updateHeader(title, subtitle, tagline) {
+    if (title) {
+        const h1 = document.querySelector('.menu-header .glow-text');
+        if (h1) h1.textContent = title;
+    }
+    if (subtitle) {
+        const h2 = document.querySelector('.menu-header h2');
+        if (h2) h2.textContent = subtitle;
+    }
+    let taglineEl = document.querySelector('.menu-header .menu-tagline');
+    if (tagline !== undefined && tagline !== null) {
+        if (tagline) {
+            if (!taglineEl) {
+                taglineEl = document.createElement('p');
+                taglineEl.className = 'menu-tagline';
+                taglineEl.style.cssText = 'text-align:center;color:var(--text-secondary);margin-top:8px;font-size:1.1rem;';
+                document.querySelector('.menu-header').appendChild(taglineEl);
+            }
+            taglineEl.textContent = tagline;
+        } else if (taglineEl) {
+            taglineEl.remove();
+        }
     }
 }
 
@@ -169,15 +233,22 @@ function renderMenu(items) {
     middleCol.style.display = 'flex';
     middleCol.style.flexDirection = 'column';
     middleCol.style.gap = '30px';
-    
-    middleCol.appendChild(createSection('BROODJES', broodjes));
-    middleCol.appendChild(createSection('SAUZEN & DIPS', sauces));
-    
-    container.appendChild(middleCol);
+
+    if (broodjes.length > 0) {
+        middleCol.appendChild(createSection('BROODJES', broodjes));
+    }
+    if (sauces.length > 0) {
+        middleCol.appendChild(createSection('SAUZEN & DIPS', sauces));
+    }
+
+    if (middleCol.children.length > 0) {
+        container.appendChild(middleCol);
+    }
 
     // 4. Render Snacks & Friet
-    // We can merge them or just put them in the remaining grid slot
-    container.appendChild(createSection('SNACKS & BITES', snacks));
+    if (snacks.length > 0) {
+        container.appendChild(createSection('SNACKS & BITES', snacks));
+    }
 }
 
 function createSection(title, itemsList) {
