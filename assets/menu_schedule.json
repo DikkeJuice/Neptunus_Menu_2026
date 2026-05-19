@@ -9,9 +9,9 @@
       "tagline": "Typical Tropical — Vrijdag 15 mei 2026"
     },
     {
-      "startDate": "2026-05-22",
-      "endDate": "2026-05-24",
-      "csv": null,
+      "startDate": "2026-05-19",
+      "endDate": "2026-05-24T12:00",
+      "csv": "./assets/bcl_europa_2026.csv",
       "title": "NEPTUNUS",
       "subtitle": "BCL EUROPA MENU",
       "tagline": "Baseball Champions League — 22 t/m 24 mei 2026"
