@@ -171,12 +171,33 @@ function renderMenu(items) {
             categoryGroups[key] = [];
         }
 
-        categoryGroups[key].push({
+        var itemData = {
             name: item['Display name'] || item.Name,
             desc: item.Description || '',
             price: processPrice(item.Price),
-            rawPrice: parseFloat(item.Price) || 0
-        });
+            rawPrice: parseFloat(item.Price) || 0,
+            toppings: []
+        };
+
+        var modifiers = item.Modifiers || '';
+        if (modifiers.indexOf('Topping: (') !== -1) {
+            var toppingStr = modifiers.split('Topping: (')[1].split(')')[0];
+            var toppingParts = toppingStr.split(',');
+            toppingParts.forEach(function(tp) {
+                var colonIdx = tp.indexOf(': ');
+                if (colonIdx === -1) return;
+                var tName = tp.substring(0, colonIdx).trim();
+                var tPriceStr = tp.substring(colonIdx + 2).trim();
+                if (tName) {
+                    var cleanPrice = tPriceStr.replace('€', '').trim();
+                    var rawPrice = parseFloat(cleanPrice);
+                    var price = rawPrice > 0 ? processPrice(cleanPrice) : 'Gratis';
+                    itemData.toppings.push({ name: tName, price: price });
+                }
+            });
+        }
+
+        categoryGroups[key].push(itemData);
     });
 
     if (extractedSauces.length > 0) {
@@ -249,12 +270,27 @@ function renderSection(container, title, items) {
     section.className = 'glass-panel menu-section';
 
     var itemsHtml = items.map(function(item) {
-        return '<div class="menu-item">' +
+        var html = '<div class="menu-item">' +
             '<div class="item-info">' +
                 '<h4 class="item-name">' + item.name + '</h4>' +
             '</div>' +
             '<div class="item-price">' + item.price + '</div>' +
         '</div>';
+
+        if (item.toppings && item.toppings.length > 0) {
+            html += '<div class="toppings-list">';
+            item.toppings.forEach(function(t) {
+                html += '<div class="menu-item topping-item">' +
+                    '<div class="item-info">' +
+                        '<span class="topping-name">' + t.name + '</span>' +
+                    '</div>' +
+                    '<span class="topping-price">' + t.price + '</span>' +
+                '</div>';
+            });
+            html += '</div>';
+        }
+
+        return html;
     }).join('');
 
     section.innerHTML = '<h3 class="section-title">' + title + '</h3>' + itemsHtml;

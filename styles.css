@@ -80,8 +80,8 @@ body {
 
 /* Main Layout */
 #menu-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
     flex-grow: 1;
 }
@@ -106,6 +106,7 @@ body {
 
 /* Golden Triangle: Center Top or Span */
 .wings-feature {
+    grid-column: 1 / -1;
     background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(2, 6, 23, 0.8) 100%);
     border: 1px solid var(--neptunus-accent);
     box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
@@ -215,4 +216,28 @@ body {
     font-size: 2.2rem;
 }
 
+/* Toppings */
+.toppings-list {
+    margin-top: 6px;
+    padding-left: 12px;
+}
 
+.topping-item {
+    border-bottom: none;
+    padding: 2px 0;
+}
+
+.topping-item .item-info {
+    padding-right: 8px;
+}
+
+.topping-name {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.topping-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
