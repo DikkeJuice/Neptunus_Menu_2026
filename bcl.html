@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0">
+    <title>BCL Europa 2026 — Neptunus Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0A0E1A;
+            --panel-bg: rgba(15, 23, 42, 0.6);
+            --panel-border: rgba(255, 255, 255, 0.06);
+            --gold: #FBBF24;
+            --blue: #3B82F6;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --text-light: #CBD5E1;
+            --footer-text: #475569;
+            --gradient-start: rgba(30, 45, 100, 0.7);
+            --gradient-end: rgba(2, 6, 23, 0.9);
+            --divider: rgba(59, 130, 246, 0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            width: 1080px;
+            min-height: 1920px;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            padding: 48px 60px;
+            gap: 28px;
+        }
+
+        .header { text-align: center; }
+        .header h1 {
+            font-size: 72px;
+            font-weight: 900;
+            letter-spacing: 12px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+        .header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: var(--blue);
+            margin-top: 4px;
+        }
+        .header p {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .divider {
+            width: 100%;
+            height: 2px;
+            background: var(--divider);
+            flex-shrink: 0;
+        }
+
+        .featured {
+            display: flex;
+            gap: 20px;
+            padding: 28px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border: 1px solid var(--gold);
+            align-items: center;
+        }
+
+        .featured-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .featured-left h3 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .featured-left img {
+            width: 260px;
+            height: 140px;
+            object-fit: contain;
+        }
+
+        .featured-left .price {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--gold);
+        }
+
+        .featured-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding-left: 24px;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .featured-right .subtitle {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .featured-right .spacer { height: 8px; }
+
+        .extra-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .extra-row .name { font-size: 14px; font-weight: 400; color: var(--text-light); }
+        .extra-row .val { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+
+        .cards-row {
+            display: flex;
+            gap: 24px;
+        }
+
+        .card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 24px;
+            border-radius: 16px;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--blue);
+            text-transform: uppercase;
+        }
+
+        .card .card-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--panel-border);
+        }
+
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .card-row .name { font-size: 17px; font-weight: 600; color: var(--text-primary); }
+        .card-row .val { font-size: 17px; font-weight: 700; color: var(--gold); }
+
+        .spacer { flex: 1; }
+
+        .footer-text {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--footer-text);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NEPTUNUS</h1>
+        <h2>BCL EUROPA MENU</h2>
+        <p>Baseball Champions League — 22 t/m 24 mei 2026</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="featured">
+        <div class="featured-left">
+            <h3>HOTDOGS</h3>
+            <img src="assets/hotdog_transparant_bg.png" alt="Hotdog">
+            <div class="price">6,20</div>
+        </div>
+        <div class="featured-right">
+            <div class="subtitle">Sauzen</div>
+            <div class="extra-row"><span class="name">Mosterd</span><span class="val">Gratis</span></div>
+            <div class="extra-row"><span class="name">Sriracha mayo</span><span class="val">0,20</span></div>
+            <div class="extra-row"><span class="name">Curry</span><span class="val">0,20</span></div>
+            <div class="extra-row"><span class="name">Mayonaise</span><span class="val">0,20</span></div>
+            <div class="extra-row"><span class="name">Ketchup</span><span class="val">0,20</span></div>
+            <div class="spacer"></div>
+            <div class="subtitle">Toppings</div>
+            <div class="extra-row"><span class="name">Augurkblokjes</span><span class="val">0,20</span></div>
+            <div class="extra-row"><span class="name">Extra crispy onions</span><span class="val">0,20</span></div>
+            <div class="extra-row"><span class="name">Rauwe ui</span><span class="val">0,20</span></div>
+            <div class="extra-row"><span class="name">Geraspte cheddar</span><span class="val">0,50</span></div>
+            <div class="extra-row"><span class="name">Bacon bits</span><span class="val">1,00</span></div>
+        </div>
+    </div>
+
+    <div class="featured">
+        <div class="featured-left">
+            <h3>FRIET</h3>
+            <img src="assets/fries_transparant_bg.png" alt="Friet">
+            <div class="price">3,00</div>
+        </div>
+        <div class="featured-right">
+            <div class="subtitle">Sauzen</div>
+            <div class="extra-row"><span class="name">Mayonaise</span><span class="val">0,40</span></div>
+            <div class="extra-row"><span class="name">Ketchup</span><span class="val">0,40</span></div>
+            <div class="extra-row"><span class="name">Curry</span><span class="val">0,40</span></div>
+            <div class="extra-row"><span class="name">Pindasaus</span><span class="val">0,60</span></div>
+            <div class="extra-row"><span class="name">Speciaal (mayo+curry+ui)</span><span class="val">0,60</span></div>
+            <div class="extra-row"><span class="name">Oorlog (mayo+pinda+ui)</span><span class="val">0,60</span></div>
+        </div>
+    </div>
+
+    <div class="cards-row">
+        <div class="card">
+            <h3>Snacks</h3>
+            <div class="card-divider"></div>
+            <div class="card-row"><span class="name">Kroket</span><span class="val">2,65</span></div>
+            <div class="card-row"><span class="name">Kaassouffle</span><span class="val">2,65</span></div>
+            <div class="card-row"><span class="name">Frikandel</span><span class="val">2,65</span></div>
+            <div class="card-row"><span class="name">Mexicano</span><span class="val">3,55</span></div>
+            <div class="card-row"><span class="name">6 Bitterballen</span><span class="val">5,10</span></div>
+            <div class="card-row"><span class="name">12 Bitterballen</span><span class="val">10,15</span></div>
+            <div class="card-row"><span class="name">24 Bitterballen</span><span class="val">20,00</span></div>
+            <div class="card-row"><span class="name">6 Kaasstengels</span><span class="val">5,10</span></div>
+            <div class="card-row"><span class="name">12 Kaasstengels</span><span class="val">10,10</span></div>
+        </div>
+        <div class="card">
+            <h3>Op Broodje</h3>
+            <div class="card-divider"></div>
+            <div class="card-row"><span class="name">Broodje Frikandel</span><span class="val">3,35</span></div>
+            <div class="card-row"><span class="name">Broodje Kaassouffle</span><span class="val">3,35</span></div>
+            <div class="card-row"><span class="name">Broodje Kroket</span><span class="val">3,35</span></div>
+            <div class="card-row"><span class="name">Broodje Mexicano</span><span class="val">4,25</span></div>
+        </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="divider"></div>
+
+    <div class="footer-text">Gaar Culinair — Neptunus Familiestadion, Rotterdam</div>
+</body>
+</html>
