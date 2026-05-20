@@ -78,11 +78,10 @@ body {
     font-size: 1.1rem;
 }
 
-/* Main Grid Layout */
+/* Main Layout */
 #menu-container {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr 1fr;
-    grid-template-rows: auto 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 30px;
     flex-grow: 1;
 }
@@ -107,7 +106,6 @@ body {
 
 /* Golden Triangle: Center Top or Span */
 .wings-feature {
-    grid-column: 1 / -1; /* Span full width at top */
     background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(2, 6, 23, 0.8) 100%);
     border: 1px solid var(--neptunus-accent);
     box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);

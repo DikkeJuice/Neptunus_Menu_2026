@@ -102,171 +102,161 @@ function processPrice(priceString) {
     return price.toFixed(2).replace('.', ',');
 }
 
+var CATEGORY_CONFIG = {
+    'WINGS': { title: 'FAMOUS NEPTUNUS WINGS', order: 1, feature: true },
+    'HOTDOGS': { title: 'HOTDOGS', order: 2 },
+    'TOSTI': { title: "TOSTI'S", order: 3 },
+    'BROODJES': { title: 'BROODJES', order: 4 },
+    'FRIET': { title: 'FRIET', order: 5 },
+    'LOSSE SNACK': { title: 'SNACKS', order: 6 },
+    'SAUS': { title: 'SAUZEN & DIPS', order: 7, special: 'sauces' },
+};
+
+function findCategoryKey(categoriesStr) {
+    if (!categoriesStr) return null;
+    var parts = categoriesStr.split(',').map(function(p) { return p.trim().toUpperCase(); });
+    var configKeys = Object.keys(CATEGORY_CONFIG);
+    for (var i = 0; i < parts.length; i++) {
+        for (var j = 0; j < configKeys.length; j++) {
+            if (parts[i] === configKeys[j].toUpperCase()) {
+                return configKeys[j];
+            }
+        }
+    }
+    return null;
+}
+
 function renderMenu(items) {
-    const container = document.getElementById('menu-container');
-    container.innerHTML = ''; // clear
+    var container = document.getElementById('menu-container');
+    container.innerHTML = '';
 
-    // Categories we want to extract
-    const wings = [];
-    const tostis = [];
-    const snacks = [];
-    const broodjes = [];
-    const sauces = [];
+    var categoryGroups = {};
+    var extractedSauces = [];
 
-    items.forEach(item => {
-        const cat = item.Categories ? item.Categories.toUpperCase() : '';
-        const name = item['Display name'] || item.Name;
-        
-        const mappedItem = {
-            name: name,
-            desc: item.Description || '',
-            price: processPrice(item.Price),
-            rawPrice: parseFloat(item.Price) || 0
-        };
+    items.forEach(function(item) {
+        var key = findCategoryKey(item.Categories || '');
 
-        if (cat.includes('WINGS')) {
-            wings.push(mappedItem);
-        } else if (cat.includes('TOSTI')) {
-            tostis.push(mappedItem);
-        } else if (cat.includes('BROODJES')) {
-            broodjes.push(mappedItem);
-        } else if (cat.includes('SNACK') || cat.includes('FRIET')) {
-            snacks.push(mappedItem);
-        } else if (cat.includes('SAUS')) {
-            const modifiers = item.Modifiers || '';
-            if (modifiers.includes('Saus: (')) {
-                const sauceStr = modifiers.split('Saus: (')[1].split(')')[0];
-                const parts = sauceStr.split(',');
-                parts.forEach(p => {
-                    const [sName, sPriceStr] = p.split(': ');
+        if (key === 'SAUS') {
+            var modifiers = item.Modifiers || '';
+            if (modifiers.indexOf('Saus: (') !== -1) {
+                var sauceStr = modifiers.split('Saus: (')[1].split(')')[0];
+                var parts = sauceStr.split(',');
+                parts.forEach(function(p) {
+                    var colonIdx = p.indexOf(': ');
+                    if (colonIdx === -1) return;
+                    var sName = p.substring(0, colonIdx).trim();
+                    var sPriceStr = p.substring(colonIdx + 2).trim();
                     if (sName && sName !== 'Geen saus') {
-                        let finalName = sName;
-                        if (['Mayo+Curry', 'Mayo+Curry+Uitjes', 'Mayo+Ketchup', 'Mayo+Ketchup+Uitjes'].includes(finalName)) {
+                        var finalName = sName;
+                        if (['Mayo+Curry', 'Mayo+Curry+Uitjes', 'Mayo+Ketchup', 'Mayo+Ketchup+Uitjes'].indexOf(finalName) !== -1) {
                             finalName = 'Speciaal';
-                        } else if (['Mayo+Pindasaus', 'Mayo+Pindasaus+Uitjes'].includes(finalName)) {
+                        } else if (['Mayo+Pindasaus', 'Mayo+Pindasaus+Uitjes'].indexOf(finalName) !== -1) {
                             finalName = 'Oorlog';
                         }
-                        
-                        // Check if we already added a sauce with this final name (to deduplicate Speciaal and Oorlog)
-                        if (!sauces.some(s => s.name === finalName)) {
-                            const cleanPrice = sPriceStr.replace('€', '').trim();
-                            const rawPrice = parseFloat(cleanPrice);
-                            const price = rawPrice > 0 ? processPrice(cleanPrice) : 'Gratis';
-                            sauces.push({ name: finalName, desc: '', price: price, rawPrice });
+                        if (!extractedSauces.some(function(s) { return s.name === finalName; })) {
+                            var cleanPrice = sPriceStr.replace('€', '').trim();
+                            var rawPrice = parseFloat(cleanPrice);
+                            var price = rawPrice > 0 ? processPrice(cleanPrice) : 'Gratis';
+                            extractedSauces.push({ name: finalName, price: price, rawPrice: rawPrice });
                         }
                     }
                 });
             }
+            return;
+        }
+
+        if (!key) return;
+
+        if (!categoryGroups[key]) {
+            categoryGroups[key] = [];
+        }
+
+        categoryGroups[key].push({
+            name: item['Display name'] || item.Name,
+            desc: item.Description || '',
+            price: processPrice(item.Price),
+            rawPrice: parseFloat(item.Price) || 0
+        });
+    });
+
+    if (extractedSauces.length > 0) {
+        categoryGroups['SAUS'] = extractedSauces;
+    }
+
+    Object.keys(categoryGroups).forEach(function(key) {
+        if (key === 'SAUS') return;
+        var items = categoryGroups[key];
+        if (key === 'TOSTI') {
+            items.sort(function(a, b) {
+                var nameA = a.name.toLowerCase();
+                var nameB = b.name.toLowerCase();
+                if (nameA === 'tosti kaas') return -1;
+                if (nameB === 'tosti kaas') return 1;
+                if (nameA === 'tosti ham kaas') return -1;
+                if (nameB === 'tosti ham kaas') return 1;
+                return a.rawPrice - b.rawPrice;
+            });
+        } else {
+            items.sort(function(a, b) { return a.rawPrice - b.rawPrice; });
         }
     });
 
-    // Zorg ervoor dat Tosti Kaas en Tosti Ham Kaas bovenaan staan, rest op prijs
-    tostis.sort((a, b) => {
-        if (a.name.toLowerCase() === 'tosti kaas') return -1;
-        if (b.name.toLowerCase() === 'tosti kaas') return 1;
-        if (a.name.toLowerCase() === 'tosti ham kaas') return -1;
-        if (b.name.toLowerCase() === 'tosti ham kaas') return 1;
-        return a.rawPrice - b.rawPrice;
+    var sortedKeys = Object.keys(categoryGroups).sort(function(a, b) {
+        var orderA = (CATEGORY_CONFIG[a] || {}).order || 99;
+        var orderB = (CATEGORY_CONFIG[b] || {}).order || 99;
+        return orderA - orderB;
     });
 
-    // Wings oplopend op prijs
-    wings.sort((a, b) => a.rawPrice - b.rawPrice);
+    sortedKeys.forEach(function(key) {
+        var config = CATEGORY_CONFIG[key] || { title: key, order: 99 };
+        var items = categoryGroups[key];
 
-    // Snacks groeperen op base snack naam
-    function getSnackGroup(snackName) {
-        const lower = snackName.toLowerCase();
-        if (lower.includes('friet')) return 1;
-        if (lower.includes('kroket')) return 2;
-        if (lower.includes('frikandel')) return 3;
-        if (lower.includes('kaassouffl')) return 4;
-        if (lower.includes('mexicano')) return 5;
-        if (lower.includes('bitterbal')) return 6;
-        if (lower.includes('kaasstengel')) return 7;
-        if (lower.includes('bittergarni')) return 8;
-        return 99;
-    }
-
-    snacks.sort((a, b) => {
-        const groupA = getSnackGroup(a.name);
-        const groupB = getSnackGroup(b.name);
-        if (groupA !== groupB) return groupA - groupB;
-        return a.rawPrice - b.rawPrice;
+        if (config.feature) {
+            renderWingsSection(container, items, config.title);
+        } else {
+            renderSection(container, config.title, items);
+        }
     });
-
-    broodjes.sort((a, b) => {
-        const groupA = getSnackGroup(a.name);
-        const groupB = getSnackGroup(b.name);
-        if (groupA !== groupB) return groupA - groupB;
-        return a.rawPrice - b.rawPrice;
-    });
-
-    // 1. Render Wings Feature (Full Width Top)
-    const wingsSection = document.createElement('section');
-    wingsSection.className = 'glass-panel wings-feature menu-section';
-    wingsSection.innerHTML = `
-        <h3 class="section-title">FAMOUS NEPTUNUS WINGS</h3>
-        <div class="wings-flavors">
-            AVAILABLE FLAVOURS:<br>
-            <span class="flavor-badge">PLAIN</span>
-            <span class="flavor-badge">TERIYAKI</span>
-            <span class="flavor-badge">LEMON PEPPER</span>
-            <span class="flavor-badge">SPICY KOREAN</span>
-        </div>
-        <div class="wings-grid">
-            ${wings.map(w => `
-                <div class="menu-item">
-                    <div class="item-info">
-                        <h4 class="item-name">${w.name}</h4>
-                    </div>
-                    <div class="item-price">${w.price}</div>
-                </div>
-            `).join('')}
-        </div>
-    `;
-    container.appendChild(wingsSection);
-
-    // 2. Render Tosti's
-    container.appendChild(createSection("TOSTI'S", tostis));
-
-    // 3. Middle Column (Broodjes + Sauzen)
-    const middleCol = document.createElement('div');
-    middleCol.style.display = 'flex';
-    middleCol.style.flexDirection = 'column';
-    middleCol.style.gap = '30px';
-
-    if (broodjes.length > 0) {
-        middleCol.appendChild(createSection('BROODJES', broodjes));
-    }
-    if (sauces.length > 0) {
-        middleCol.appendChild(createSection('SAUZEN & DIPS', sauces));
-    }
-
-    if (middleCol.children.length > 0) {
-        container.appendChild(middleCol);
-    }
-
-    // 4. Render Snacks & Friet
-    if (snacks.length > 0) {
-        container.appendChild(createSection('SNACKS & BITES', snacks));
-    }
 }
 
-function createSection(title, itemsList) {
-    const section = document.createElement('section');
-    section.className = 'glass-panel menu-section';
-    
-    let itemsHtml = itemsList.map(item => `
-        <div class="menu-item">
-            <div class="item-info">
-                <h4 class="item-name">${item.name}</h4>
-            </div>
-            <div class="item-price">${item.price}</div>
-        </div>
-    `).join('');
+function renderWingsSection(container, items, title) {
+    var section = document.createElement('section');
+    section.className = 'glass-panel wings-feature menu-section';
+    section.innerHTML = '' +
+        '<h3 class="section-title">' + title + '</h3>' +
+        '<div class="wings-flavors">' +
+            'AVAILABLE FLAVOURS:<br>' +
+            '<span class="flavor-badge">PLAIN</span>' +
+            '<span class="flavor-badge">TERIYAKI</span>' +
+            '<span class="flavor-badge">LEMON PEPPER</span>' +
+            '<span class="flavor-badge">SPICY KOREAN</span>' +
+        '</div>' +
+        '<div class="wings-grid">' +
+            items.map(function(w) {
+                return '<div class="menu-item">' +
+                    '<div class="item-info">' +
+                        '<h4 class="item-name">' + w.name + '</h4>' +
+                    '</div>' +
+                    '<div class="item-price">' + w.price + '</div>' +
+                '</div>';
+            }).join('') +
+        '</div>';
+    container.appendChild(section);
+}
 
-    section.innerHTML = `
-        <h3 class="section-title">${title}</h3>
-        ${itemsHtml}
-    `;
-    return section;
+function renderSection(container, title, items) {
+    var section = document.createElement('section');
+    section.className = 'glass-panel menu-section';
+
+    var itemsHtml = items.map(function(item) {
+        return '<div class="menu-item">' +
+            '<div class="item-info">' +
+                '<h4 class="item-name">' + item.name + '</h4>' +
+            '</div>' +
+            '<div class="item-price">' + item.price + '</div>' +
+        '</div>';
+    }).join('');
+
+    section.innerHTML = '<h3 class="section-title">' + title + '</h3>' + itemsHtml;
+    container.appendChild(section);
 }
