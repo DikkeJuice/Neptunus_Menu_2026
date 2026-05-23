@@ -175,6 +175,69 @@
             font-weight: 400;
             color: var(--footer-text);
         }
+
+        .burger-banner {
+            display: flex;
+            gap: 20px;
+            padding: 24px 28px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(234, 88, 12, 0.08));
+            border: 1.5px solid rgba(251, 191, 36, 0.4);
+            align-items: center;
+        }
+
+        .burger-banner-left {
+            flex-shrink: 0;
+        }
+
+        .burger-icon {
+            font-size: 64px;
+            line-height: 1;
+        }
+
+        .burger-banner-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .burger-banner-title {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .burger-banner-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .burger-banner-prices {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .burger-row {
+            display: flex;
+            justify-content: space-between;
+            max-width: 320px;
+        }
+        .burger-row span:first-child {
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+        .burger-row span:last-child {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gold);
+        }
     </style>
 </head>
 <body>
@@ -182,6 +245,21 @@
         <h1>NEPTUNUS</h1>
         <h2>BCL EUROPA MENU</h2>
         <p>Baseball Champions League — 22 t/m 24 mei 2026</p>
+    </div>
+
+    <div class="burger-banner">
+        <div class="burger-banner-left">
+            <div class="burger-icon">&#x1F354;</div>
+        </div>
+        <div class="burger-banner-right">
+            <div class="burger-banner-title">OOK ZIN IN EEN BURGER?</div>
+            <div class="burger-banner-sub">Loop naar boven! De burgerkraam staat op de tribune bij het eerste honk.</div>
+            <div class="burger-banner-prices">
+                <div class="burger-row"><span>Hamburger</span><span>€ 8,50</span></div>
+                <div class="burger-row"><span>+ Cheese (cheddar)</span><span>€ 0,50</span></div>
+                <div class="burger-row"><span>+ Bacon</span><span>€ 1,50</span></div>
+            </div>
+        </div>
     </div>
 
     <div class="divider"></div>
