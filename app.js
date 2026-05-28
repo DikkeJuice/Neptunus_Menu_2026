@@ -8,6 +8,7 @@ async function loadMenuData() {
         let menuTitle = null;
         let menuSubtitle = null;
         let menuTagline = null;
+        let menuNotice = null;
 
         if (!csvPath) {
             try {
@@ -29,6 +30,7 @@ async function loadMenuData() {
                     menuTitle = event.title;
                     menuSubtitle = event.subtitle;
                     menuTagline = event.tagline;
+                    menuNotice = event.notice || null;
                 } else {
                     csvPath = schedule.defaultCsv;
                 }
@@ -42,6 +44,7 @@ async function loadMenuData() {
         }
 
         updateHeader(menuTitle, menuSubtitle, menuTagline);
+        renderNotice(menuNotice);
 
         const response = await fetch(csvPath);
         const csvText = await response.text();
@@ -60,6 +63,20 @@ async function loadMenuData() {
         });
     } catch (error) {
         console.error("Failed to load menu data:", error);
+    }
+}
+
+function renderNotice(notice) {
+    var existing = document.getElementById('menu-notice');
+    if (existing) existing.remove();
+    if (!notice) return;
+    var el = document.createElement('div');
+    el.id = 'menu-notice';
+    el.style.cssText = 'text-align:center;background:#fbbf2422;border:1px solid #FBBF24;border-radius:12px;padding:16px 24px;margin:0 0 20px 0;color:#FBBF24;font-size:1.05rem;line-height:1.6;white-space:pre-line;font-weight:600;';
+    el.textContent = notice;
+    var container = document.getElementById('menu-container');
+    if (container) {
+        container.parentNode.insertBefore(el, container);
     }
 }
 

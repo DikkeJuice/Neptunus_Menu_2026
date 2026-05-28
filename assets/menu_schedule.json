@@ -15,6 +15,15 @@
       "title": "NEPTUNUS",
       "subtitle": "BCL EUROPA MENU",
       "tagline": "Baseball Champions League — 22 t/m 24 mei 2026"
+    },
+    {
+      "startDate": "2026-05-28",
+      "endDate": "2026-05-28T23:59",
+      "csv": "./assets/studentenavond_28mei.csv",
+      "title": "NEPTUNUS",
+      "subtitle": "STUDENTENAVOND MENU",
+      "tagline": "Neptunus vs Amsterdam Pirates — Woensdag 28 mei 2026",
+      "notice": "Buiten bij het softbalhok — naast het softbalveld — worden hotdogs en hamburgers vers van de barbecue geserveerd!\nHotdog € 3,00 | Hamburger € 4,00\nKom gezellig langs buiten!"
     }
   ],
   "defaultCsv": "./assets/neptunus2026.csv",
