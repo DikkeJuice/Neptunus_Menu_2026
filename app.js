@@ -245,16 +245,49 @@ function renderMenu(items) {
         return orderA - orderB;
     });
 
+    var nonWingKeys = [];
+    sortedKeys.forEach(function(key) {
+        var config = CATEGORY_CONFIG[key] || { title: key, order: 99 };
+        if (!config.feature) {
+            nonWingKeys.push(key);
+        }
+    });
+
     sortedKeys.forEach(function(key) {
         var config = CATEGORY_CONFIG[key] || { title: key, order: 99 };
         var items = categoryGroups[key];
-
         if (config.feature) {
             renderWingsSection(container, items, config.title);
-        } else {
-            renderSection(container, config.title, items);
         }
     });
+
+    if (nonWingKeys.length > 0) {
+        var columnsWrapper = document.createElement('div');
+        columnsWrapper.className = 'menu-columns';
+
+        var colDivs = [];
+        for (var i = 0; i < 3; i++) {
+            var colDiv = document.createElement('div');
+            colDiv.className = 'menu-col';
+            colDivs.push(colDiv);
+            columnsWrapper.appendChild(colDiv);
+        }
+
+        var colCounts = [0, 0, 0];
+        nonWingKeys.forEach(function(key) {
+            var config = CATEGORY_CONFIG[key] || { title: key, order: 99 };
+            var items = categoryGroups[key];
+            var n = items.length;
+            var shortest = 0;
+            for (var j = 1; j < 3; j++) {
+                if (colCounts[j] < colCounts[shortest]) shortest = j;
+            }
+            renderSection(colDivs[shortest], config.title, items);
+            colCounts[shortest] += n;
+        });
+
+        container.appendChild(columnsWrapper);
+    }
 }
 
 function renderWingsSection(container, items, title) {
