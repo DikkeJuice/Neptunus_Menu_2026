@@ -72,7 +72,7 @@ function renderNotice(notice) {
     if (!notice) return;
     var el = document.createElement('div');
     el.id = 'menu-notice';
-    el.style.cssText = 'text-align:center;background:#fbbf2422;border:1px solid #FBBF24;border-radius:12px;padding:16px 24px;margin:0 0 20px 0;color:#FBBF24;font-size:1.05rem;line-height:1.6;white-space:pre-line;font-weight:600;';
+    el.style.cssText = 'text-align:center;background:#fbbf2422;border:1px solid #FBBF24;border-radius:12px;padding:12px 20px;margin:0 0 14px 0;color:#FBBF24;font-size:0.85rem;line-height:1.5;white-space:pre-line;font-weight:600;';
     el.textContent = notice;
     var container = document.getElementById('menu-container');
     if (container) {
@@ -95,7 +95,7 @@ function updateHeader(title, subtitle, tagline) {
             if (!taglineEl) {
                 taglineEl = document.createElement('p');
                 taglineEl.className = 'menu-tagline';
-                taglineEl.style.cssText = 'text-align:center;color:var(--text-secondary);margin-top:8px;font-size:1.1rem;';
+                taglineEl.style.cssText = 'text-align:center;color:var(--text-secondary);margin-top:4px;font-size:0.85rem;';
                 document.querySelector('.menu-header').appendChild(taglineEl);
             }
             taglineEl.textContent = tagline;
