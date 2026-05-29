@@ -187,6 +187,38 @@ body {
     font-size: 0.65rem;
 }
 
+.feature-special .section-title {
+    color: var(--gold);
+    font-size: 1.3rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.feature-special .special-item {
+    justify-content: center;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.feature-special .special-name {
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.feature-special .special-desc {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--gold);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.feature-special .special-price {
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-left: 16px;
+}
+
 /* Items */
 .menu-item {
     display: flex;

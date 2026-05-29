@@ -120,6 +120,7 @@ function processPrice(priceString) {
 }
 
 var CATEGORY_CONFIG = {
+    'SPECIAL': { title: 'SPECIAL', order: 0, feature: true },
     'WINGS': { title: 'FAMOUS NEPTUNUS WINGS', order: 1, feature: true },
     'HOTDOGS': { title: 'HOTDOGS', order: 2 },
     'TOSTI': { title: "TOSTI'S", order: 3 },
@@ -257,7 +258,11 @@ function renderMenu(items) {
         var config = CATEGORY_CONFIG[key] || { title: key, order: 99 };
         var items = categoryGroups[key];
         if (config.feature) {
-            renderWingsSection(container, items, config.title);
+            if (key === 'WINGS') {
+                renderWingsSection(container, items, config.title);
+            } else {
+                renderFeatureSection(container, items, config.title);
+            }
         }
     });
 
@@ -312,6 +317,24 @@ function renderWingsSection(container, items, title) {
                 '</div>';
             }).join('') +
         '</div>';
+    container.appendChild(section);
+}
+
+function renderFeatureSection(container, items, title) {
+    var section = document.createElement('section');
+    section.className = 'glass-panel wings-feature feature-special menu-section';
+
+    var itemsHtml = items.map(function(item) {
+        return '<div class="menu-item special-item">' +
+            '<div class="item-info">' +
+                '<h4 class="item-name special-name">' + item.name + '</h4>' +
+                (item.desc ? '<p class="item-desc special-desc">' + item.desc + '</p>' : '') +
+            '</div>' +
+            '<div class="item-price special-price">' + item.price + '</div>' +
+        '</div>';
+    }).join('');
+
+    section.innerHTML = '<h3 class="section-title special-title">' + title + '</h3>' + itemsHtml;
     container.appendChild(section);
 }
 
