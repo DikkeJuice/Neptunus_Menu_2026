@@ -293,6 +293,9 @@ function renderMenu(items) {
 
         container.appendChild(columnsWrapper);
     }
+
+    // Render promo strip for highlighted items
+    renderPromoStrip(items);
 }
 
 function renderWingsSection(container, items, title) {
@@ -368,4 +371,40 @@ function renderSection(container, title, items) {
 
     section.innerHTML = '<h3 class="section-title">' + title + '</h3>' + itemsHtml;
     container.appendChild(section);
+}
+
+function renderPromoStrip(items) {
+    // Look for special promo items (e.g., empanada)
+    var promoItems = items.filter(function(item) {
+        var name = (item['Display name'] || item.Name || '').toLowerCase();
+        return name.indexOf('empanada') !== -1;
+    });
+
+    if (promoItems.length === 0) return;
+
+    // Remove existing promo strip if any
+    var existing = document.getElementById('promo-strip');
+    if (existing) existing.remove();
+
+    var app = document.getElementById('app');
+    var strip = document.createElement('div');
+    strip.id = 'promo-strip';
+    strip.className = 'promo-strip';
+
+    promoItems.forEach(function(item) {
+        var name = item['Display name'] || item.Name;
+        var desc = item.Description || '';
+        var price = processPrice(item.Price);
+
+        strip.innerHTML +=
+            '<span class="promo-emoji">🥟</span>' +
+            '<span class="promo-badge">NIEUW</span>' +
+            '<div class="promo-info">' +
+                '<span class="promo-name">' + name + '</span>' +
+                (desc ? '<span class="promo-desc">' + desc + '</span>' : '') +
+            '</div>' +
+            '<span class="promo-price">' + price + '</span>';
+    });
+
+    app.appendChild(strip);
 }
